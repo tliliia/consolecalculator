@@ -7,25 +7,18 @@ import com.lilykmtd.*;
 import static com.lilykmtd.CalculatorCache.DEFAULTCACHESIZE;
 
 public class Calculator {
-    private static CalculatorCache cache;
+    private static CalculatorCache cache = new CalculatorCache(DEFAULTCACHESIZE);
 
     public static void setCacheSize(int size) {
-        Calculator.getCache().setCacheSize(size);
-    }
-
-    private static CalculatorCache getCache() {
-        if (cache == null) {
-            cache = new CalculatorCache(DEFAULTCACHESIZE);
-        }
-        return cache;
+        cache.setCacheSize(size);
     }
 
     static public double calculateExpressionWithPrecision(String expression, int precision) throws Exception {
-        Double res = Calculator.getCache().getResultForExpressionWithPrecision(expression, precision);
+        Double res = cache.getResultForExpressionWithPrecision(expression, precision);
         if (res.equals(Double.NaN)) {//нет в кеше
             try {
                 res = doExpressionWithPrecision(expression, precision);
-                Calculator.getCache().saveCalculation(expression, precision, res);
+                cache.saveCalculation(expression, precision, res);
             } catch (Exception e) {
                 throw e;
             }
